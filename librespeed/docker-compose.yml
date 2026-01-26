@@ -1,0 +1,20 @@
+services:
+  speedtest:
+    container_name: speedtest
+    image: ghcr.io/librespeed/speedtest:latest
+    restart: always
+    environment:
+      MODE: standalone
+      TITLE: ${SPEEDTEST_TITLE}
+      TELEMETRY: ${SPEEDTEST_TELEMETRY}
+      ENABLE_ID_OBFUSCATION: ${SPEEDTEST_ENABLE_ID_OBFUSCATION}
+      REDACT_IP_ADDRESSES: ${SPEEDTEST_REDACT_IP_ADDRESSES}
+      PASSWORD: ${SPEEDTEST_PASSWORD}
+      EMAIL: ${SPEEDTEST_EMAIL}
+      DISABLE_IPINFO: ${SPEEDTEST_DISABLE_IPINFO}
+      DISTANCE: ${SPEEDTEST_DISTANCE}
+      #IPINFO_APIKEY: ${SPEEDTEST_IPINFO_APIKEY}
+    volumes:
+      - ${SPEEDTEST_DATA_PATH}:/data
+    ports:
+      - ${SPEEDTEST_PORT}:8080

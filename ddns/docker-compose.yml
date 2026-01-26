@@ -1,0 +1,22 @@
+# version: "3.9"
+
+services:
+  ddns:
+    image: newfuture/ddns:latest
+    container_name: ddns
+    restart: always
+
+    environment:
+      # --- Cloudflare provider ---
+      DDNS_DNS: cloudflare
+      DDNS_TOKEN: ${DDNS_TOKEN}
+      DDNS_ID: ${DDNS_ID}
+
+      # --- Domain(s) to update ---
+      DDNS_IPV4: ${DDNS_IPV4}
+
+      # --- Force public IP detection ---
+      DDNS_INDEX4: ${DDNS_INDEX4}
+
+      # --- Cron schedule ---
+      DDNS_CRON: ${DDNS_CRON}

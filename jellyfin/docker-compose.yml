@@ -1,0 +1,82 @@
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+
+    user: "1000:1000"
+
+    group_add:
+      - "922"
+
+    ports:
+      - "8096:8096"
+      - "7359:7359/udp"
+
+    volumes:
+      - ./config:/config
+      - ./cache:/cache
+
+      # CIFS mounts
+      - "truenas_blu-ray:/data/truenas_blu-ray:ro"
+      - "truenas_dvd:/data/truenas_dvd:ro"
+      - "truenas_erai-raws:/data/truenas_erai-raws:ro"
+
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri/card0:/dev/dri/card0
+
+  wizarr:
+    container_name: wizarr
+    image: ghcr.io/wizarrrr/wizarr
+    ports:
+      - 5690:5690
+    volumes:
+      - ./appdata:/data
+    environment:
+      - PUID=1000 #Set UID
+      - PGID=1000 #Set GID
+      - DISABLE_BUILTIN_AUTH=false #Set to true ONLY if you are using another auth provider (Authelia, Authentik, etc)
+      - TZ=America/Chicago #Set your timezone here
+
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    restart: unless-stopped
+    ports:
+      - "9292:80"
+    volumes:
+      - ./filebrowser.db:/database/filebrowser.db
+      - ./filebrowser-config:/config
+
+      # Same CIFS mounts as Jellyfin
+      - truenas_blu-ray:/srv/truenas_blu-ray:ro
+      - truenas_dvd:/srv/truenas_dvd:ro
+      - truenas_erai-raws:/srv/truenas_erai-raws:ro
+
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+
+volumes:
+  truenas_blu-ray:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: //192.168.8.2/Blu-ray
+      o: username=${TrueNAS_SMB_USER},password=${TrueNAS_SMB_PASS},file_mode=0777,dir_mode=0777,ro
+
+  truenas_dvd:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: //192.168.8.2/dvd
+      o: username=${TrueNAS_SMB_USER},password=${TrueNAS_SMB_PASS},file_mode=0777,dir_mode=0777,ro
+
+  truenas_erai-raws:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: //192.168.8.2/Erai-raws
+      o: username=${TrueNAS_SMB_USER},password=${TrueNAS_SMB_PASS},file_mode=0777,dir_mode=0777,ro

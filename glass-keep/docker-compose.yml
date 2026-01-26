@@ -1,0 +1,15 @@
+services:
+  app:
+    image: nikunjsingh/glass-keep:v20260114-1008
+    container_name: glass-keep
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      API_PORT: ${GLASSKEEP_API_PORT}
+      JWT_SECRET: ${GLASSKEEP_JWT_SECRET}
+      DB_FILE: /app/data/notes.db
+      ADMIN_EMAILS: ${GLASSKEEP_ADMIN_EMAILS}
+    ports:
+      - ${GLASSKEEP_PORT}:8080
+    volumes:
+      - ${GLASSKEEP_DATA_PATH}:/app/data

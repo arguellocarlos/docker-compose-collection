@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: docker.io/library/postgres:16.1
+    container_name: lenpaste-pg
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_USER=${LENPASTE_DB_USER}
+      - POSTGRES_PASSWORD=${LENPASTE_DB_PASSWORD}
+    volumes:
+      - ${LENPASTE_PG_DATA_PATH}:/var/lib/postgresql/data
+
+  lenpaste:
+    image: ghcr.io/lcomrade/lenpaste:1.3.1
+    container_name: lenpaste
+    restart: on-failure:10
+    environment:
+      - LENPASTE_DB_DRIVER=postgres
+      - LENPASTE_DB_SOURCE=${LENPASTE_DB_SOURCE}
+    volumes:
+      - ${LENPASTE_DATA_PATH}:/data
+    ports:
+      - ${LENPASTE_PORT}:80
+    depends_on:
+      - postgres

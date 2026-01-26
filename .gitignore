@@ -1,0 +1,19 @@
+# Ignore environment files
+.env
+*.env
+
+# Ignore Docker data directories
+**/data/
+**/config/
+**/postgresql/
+**/letsencrypt/
+**/geoip/
+
+# Ignore logs
+*.log
+
+# Ignore OS-specific junk
+.DS_Store
+Thumbs.db
+
+wastebin/docker-compose.yml
