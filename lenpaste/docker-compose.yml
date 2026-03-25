@@ -22,3 +22,25 @@ services:
       - ${LENPASTE_PORT}:80
     depends_on:
       - postgres
+
+services:
+  speedtest:
+    container_name: speedtest
+    image: ghcr.io/librespeed/speedtest:latest
+    restart: always
+    environment:
+      MODE: standalone
+      TITLE: "hina-raws LibreSpeed Server"
+      TELEMETRY: "true"
+      ENABLE_ID_OBFUSCATION: "true"
+      REDACT_IP_ADDRESSES: "true"
+      PASSWORD: VB1Ia9x9FPyP7I5ma5LzTS5Vuu8Psg43
+      EMAIL: "no-reply@hina-raws.info"
+      DISABLE_IPINFO: "false"
+      #IPINFO_APIKEY: "your api key"
+      DISTANCE: "km"
+      #WEBPORT: 8080
+    volumes:
+      - "/home/carlos/Docker/librespeed:/data"
+    ports:
+      - "8880:8080" # webport mapping (host:container)

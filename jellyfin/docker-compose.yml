@@ -4,27 +4,26 @@ services:
     container_name: jellyfin
     restart: unless-stopped
 
-    user: "1000:1000"
+    user: "1000:1000" # sudo usermod -aG render, sudo usermod -aG video to add your user to the render and video groups for hardware acceleration, you can check if your user is in those groups with ```groups```
 
     group_add:
-      - "922"
-
+      - "922" # run, ```getent group render | cut -d: -f3``` to get the GID for render group
+      - "44" # run ```getent group video | cut -d: -f3``` for video group, add both if you want hardware acceleration
     ports:
       - "8096:8096"
       - "7359:7359/udp"
-
     volumes:
       - ./config:/config
       - ./cache:/cache
-
+      
       # CIFS mounts
       - "truenas_blu-ray:/data/truenas_blu-ray:ro"
       - "truenas_dvd:/data/truenas_dvd:ro"
       - "truenas_erai-raws:/data/truenas_erai-raws:ro"
 
     devices:
-      - /dev/dri/renderD128:/dev/dri/renderD128
-      - /dev/dri/card0:/dev/dri/card0
+      - /dev/dri/renderD128:/dev/dri/renderD128 # docker exec -it jellyfin /usr/lib/jellyfin-ffmpeg/vainfo --display drm --device /dev/dri/renderD128 to check if hardware acceleration is working, you should see "VAProfileH264Main" or similar in the output
+      - /dev/dri/card0:/dev/dri/card0 # docker exec -it jellyfin /usr/lib/jellyfin-ffmpeg/ffmpeg -v debug -init_hw_device vulkan to check if hardware acceleration is working, you should see "Vulkan driver found" in the output
 
   wizarr:
     container_name: wizarr
@@ -34,10 +33,10 @@ services:
     volumes:
       - ./appdata:/data
     environment:
-      - PUID=1000 #Set UID
-      - PGID=1000 #Set GID
-      - DISABLE_BUILTIN_AUTH=false #Set to true ONLY if you are using another auth provider (Authelia, Authentik, etc)
-      - TZ=America/Chicago #Set your timezone here
+      - PUID=1000 # Set UID
+      - PGID=1000 # Set GID
+      - DISABLE_BUILTIN_AUTH=false # Set to true ONLY if you are using another auth provider (Authelia, Authentik, etc)
+      - TZ=America/Chicago # Set your timezone here
 
   filebrowser:
     image: filebrowser/filebrowser:latest

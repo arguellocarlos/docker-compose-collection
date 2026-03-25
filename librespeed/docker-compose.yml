@@ -1,3 +1,25 @@
+#services:
+#  speedtest:
+#    container_name: speedtest
+#    image: ghcr.io/librespeed/speedtest:latest
+#    restart: always
+#    environment:
+#      MODE: standalone
+#      TITLE: "[REDACTED] LibreSpeed Server"
+#      TELEMETRY: "true"
+#      ENABLE_ID_OBFUSCATION: "true"
+#      REDACT_IP_ADDRESSES: "true"
+#      PASSWORD: [REDACTED]
+#      EMAIL: "no-reply@[REDACTED].com"
+#      DISABLE_IPINFO: "false"
+#      #IPINFO_APIKEY: "your api key"
+#      DISTANCE: "km"
+#      #WEBPORT: 8080
+#    volumes:
+#      - "./librespeed:/data"
+#    ports:
+#      - "8880:8080" # webport mapping (host:container)
+
 services:
   speedtest:
     container_name: speedtest
