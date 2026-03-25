@@ -1,0 +1,17 @@
+services:
+  wastebin:
+    restart: always
+    container_name: wastebin
+    environment:
+      - WASTEBIN_DATABASE_PATH=/data/state.db
+      - WASTEBIN_ADDRESS_PORT=0.0.0.0:8088
+      - WASTEBIN_BASE_URL=https://paste.[REDACTED].
+      - WASTEBIN_PASSWORD_SALT=[REDACTED]
+      - WASTEBIN_THEME=coldark
+      - WASTEBIN_TITLE=pastebin
+      - RUST_LOG=info
+    ports:
+      - "8088:8088"
+    volumes:
+      - /home/carlos/Docker/wastebin/data:/data
+    image: 'quxfoo/wastebin:latest'
