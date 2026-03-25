@@ -25,6 +25,42 @@ services:
       - /dev/dri/renderD128:/dev/dri/renderD128 # docker exec -it jellyfin /usr/lib/jellyfin-ffmpeg/vainfo --display drm --device /dev/dri/renderD128 to check if hardware acceleration is working, you should see "VAProfileH264Main" or similar in the output
       - /dev/dri/card0:/dev/dri/card0 # docker exec -it jellyfin /usr/lib/jellyfin-ffmpeg/ffmpeg -v debug -init_hw_device vulkan to check if hardware acceleration is working, you should see "Vulkan driver found" in the output
 
+#Architecture:                x86_64
+#  CPU op-mode(s):            32-bit, 64-bit
+#  Address sizes:             48 bits physical, 48 bits virtual
+#  Byte Order:                Little Endian
+#CPU(s):                      16
+#  On-line CPU(s) list:       0-15
+#Vendor ID:                   AuthenticAMD
+#  Model name:                AMD Ryzen 7 7730U with Radeon Graphics
+
+#Trying display: drm
+#libva info: VA-API version 1.22.0
+#libva info: Trying to open /usr/lib/x86_64-linux-gnu/dri/radeonsi_drv_video.so
+#libva info: Found init function __vaDriverInit_1_22
+#libva info: va_openDriver() returns 0
+#vainfo: VA-API version: 1.22 (libva 2.22.0)
+#vainfo: Driver version: Mesa Gallium driver 25.2.6-1~bpo13+1 for AMD Radeon Graphics (radeonsi, renoir, ACO, DRM 3.64, 6.18.9+deb13-amd64)
+#vainfo: Supported profile and entrypoints
+#      VAProfileMPEG2Simple            : VAEntrypointVLD
+#      VAProfileMPEG2Main              : VAEntrypointVLD
+#      VAProfileVC1Simple              : VAEntrypointVLD
+#      VAProfileVC1Main                : VAEntrypointVLD
+#      VAProfileVC1Advanced            : VAEntrypointVLD
+#      VAProfileH264ConstrainedBaseline: VAEntrypointVLD
+#      VAProfileH264ConstrainedBaseline: VAEntrypointEncSlice
+#      VAProfileH264Main               : VAEntrypointVLD
+#      VAProfileH264Main               : VAEntrypointEncSlice
+#      VAProfileH264High               : VAEntrypointVLD
+#      VAProfileH264High               : VAEntrypointEncSlice
+#      VAProfileHEVCMain               : VAEntrypointVLD
+#      VAProfileHEVCMain               : VAEntrypointEncSlice
+#      VAProfileHEVCMain10             : VAEntrypointVLD
+#      VAProfileHEVCMain10             : VAEntrypointEncSlice
+#      VAProfileJPEGBaseline           : VAEntrypointVLD
+#      VAProfileVP9Profile0            : VAEntrypointVLD
+#      VAProfileVP9Profile2            : VAEntrypointVLD
+#      VAProfileNone                   : VAEntrypointVideoProc
   wizarr:
     container_name: wizarr
     image: ghcr.io/wizarrrr/wizarr
@@ -34,7 +70,7 @@ services:
       - ./appdata:/data
     environment:
       - PUID=1000 # Set UID
-      - PGID=1000 # Set GID
+      - PGID=1000  # Set GID
       - DISABLE_BUILTIN_AUTH=false # Set to true ONLY if you are using another auth provider (Authelia, Authentik, etc)
       - TZ=America/Chicago # Set your timezone here
 

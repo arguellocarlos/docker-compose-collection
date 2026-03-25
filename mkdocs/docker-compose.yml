@@ -1,0 +1,11 @@
+services:
+  mkdocs:
+    image: squidfunk/mkdocs-material
+    container_name: mkdocs
+    ports:
+      - "7000:8000"
+    volumes:
+      - ./docs:/docs/docs
+      - ./mkdocs.yml:/docs/mkdocs.yml
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped

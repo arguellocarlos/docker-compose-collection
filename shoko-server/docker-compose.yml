@@ -1,0 +1,126 @@
+# Depends on,
+
+# qemu-system-x86 qemu-utils 
+# && mkdir -p ./shoko/shoko_data
+
+#/etc/systemd/system/shoko-qcow2.service
+
+#[Unit]
+#Description=Attach Shoko QCOW2 disk
+#DefaultDependencies=no
+#Before=local-fs.target
+#After=systemd-modules-load.service
+#
+#[Service]
+#Type=oneshot
+#ExecStart=/sbin/modprobe nbd max_part=8
+#
+## Pre-disconnect (ignored if it fails)
+#ExecStart=-/usr/bin/qemu-nbd --disconnect /dev/nbd0
+#
+## Attach QCOW2
+#ExecStart=/usr/bin/qemu-nbd --connect=/dev/nbd0 /home/carlos/Docker/shoko/shoko.qcow2
+#
+## Clean disconnect on stop
+#ExecStop=/usr/bin/qemu-nbd --disconnect /dev/nbd0
+#
+#RemainAfterExit=yes
+#
+#[Install]
+#WantedBy=local-fs.target
+
+# Depends on,
+
+# /etc/systemd/system/home-carlos-Docker-shoko-shoko_data.mount
+
+#[Unit]
+#Description=Mount Shoko QCOW2 filesystem
+#After=shoko-qcow2.service
+#Requires=shoko-qcow2.service
+#
+#[Mount]
+#What=/dev/nbd0
+#Where=/home/carlos/Docker/shoko/shoko_data
+#Type=ext4
+#Options=defaults
+#
+#[Install]
+#WantedBy=multi-user.target
+
+
+services:
+  shoko_erai-raws:
+    shm_size: 4096m
+    container_name: shoko_erai-raws
+    image: ghcr.io/shokoanime/server:latest
+    restart: always
+    environment:
+      - "PUID=1000"
+      - "PGID=100"
+      - "TZ=America/Chicago"
+    ports:
+      - "8111:8111"
+    volumes:
+      # QCOW2-backed config directory
+      - "./shoko_data/erai-raws:/home/shoko/.shoko"
+      # CIFS mounts
+      - "truenas_backup:/data/truenas_backup:rw"
+
+  shoko_subsplease:
+    shm_size: 4096m
+    container_name: shoko_subsplease
+    image: ghcr.io/shokoanime/server:latest
+    restart: always
+    environment:
+      - "PUID=1000"
+      - "PGID=100"
+      - "TZ=America/Chicago"
+    ports:
+      - "8112:8111"
+    volumes:
+      # QCOW2-backed config directory
+      - "./shoko_data/subsplease:/home/shoko/.shoko"
+      # CIFS mounts
+      - "truenas_backup:/data/truenas_backup:rw"
+
+  shoko_toonshub:
+    shm_size: 4096m
+    container_name: shoko_toonshub
+    image: ghcr.io/shokoanime/server:latest
+    restart: always
+    environment:
+      - "PUID=1000"
+      - "PGID=100"
+      - "TZ=America/Chicago"
+    ports:
+      - "8113:8111"
+    volumes:
+      # QCOW2-backed config directory
+      - "./shoko_data/toonshub:/home/shoko/.shoko"
+      # CIFS mounts
+      - "truenas_backup:/data/truenas_backup:rw"
+
+  shoko_varyg:
+    shm_size: 4096m
+    container_name: shoko_varyg
+    image: ghcr.io/shokoanime/server:latest
+    restart: always
+    environment:
+      - "PUID=1000"
+      - "PGID=100"
+      - "TZ=America/Chicago"
+    ports:
+      - "8114:8111"
+    volumes:
+      # QCOW2-backed config directory
+      - "./shoko_data/varyg:/home/shoko/.shoko"
+      # CIFS mounts
+      - "truenas_backup:/data/truenas_backup:rw"
+
+volumes:
+  truenas_backup:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: //192.168.8.2/Backup
+      o: username=${TrueNAS_SMB_USER},password=${TrueNAS_SMB_PASS},file_mode=0777,dir_mode=0777,rw

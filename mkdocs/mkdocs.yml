@@ -1,0 +1,124 @@
+site_name: Notes...
+site_description: Personal knowledge base and blog
+site_author: Carlos Arguello...
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - content.action.edit
+    - search.suggest
+    - search.highlight
+    - search.share
+    - blog
+    - blog.tags
+    - blog.categories
+    - content.action.edit
+    - content.action.view
+    - content.footer.last-updated
+
+  language: en  # Default language (ES enabled below)
+
+  palette:
+    # Automatic mode (system preference)
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - content.action.edit
+    - search.suggest
+    - search.highlight
+    - search.share
+    - blog
+
+extra:
+  alternate:
+    - name: English
+      link: /
+      lang: en
+    - name: Español
+      link: /es/
+      lang: es
+
+plugins:
+  - search:
+      lang:
+        - en
+        - es
+  - blog:
+      blog_dir: blog
+      blog_toc: true
+      post_date_format: long
+  - minify:
+      minify_html: true
+  - git-revision-date-localized:
+      enable_creation_date: true
+      fallback_to_build_date: true
+      timezone: America/Chicago
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - footnotes
+  - def_list
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+nav:
+  - Home: index.md
+  - Notes:
+      - Linux: linux.md
+      - Docker: docker.md
+      - Networking: networking.md
+  - Blog:
+      - blog/index.md
+  - Español:
+      - Inicio: es/index.md
+      - Linux: es/linux.md
+      - Docker: es/docker.md
+      - Redes: es/networking.md
+
+extra:
+  nav:
+    - icon: material/home
+      title: Home
+      url: /
+    - icon: material/notebook
+      title: Notes
+      url: /notes/
+    - icon: material/rss
+      title: Blog
+      url: /blog/
+    - icon: material/translate
+      title: Español
+      url: /es/
