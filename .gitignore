@@ -15,5 +15,3 @@
 # Ignore OS-specific junk
 .DS_Store
 Thumbs.db
-
-wastebin/docker-compose.yml
